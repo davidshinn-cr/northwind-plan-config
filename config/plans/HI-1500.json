@@ -1,0 +1,45 @@
+{
+  "plan_id": "HI-1500",
+  "plan_name": "Hospital Indemnity 1500",
+  "product_line": "hospital_indemnity",
+  "carrier_id": "NW-LIFE",
+  "plan_year": 2027,
+  "effective_date": "2027-01-01",
+  "termination_date": null,
+  "availability": {
+    "states": [
+      "FL",
+      "GA",
+      "TX"
+    ],
+    "situs_rule": "member_residence",
+    "distribution_channels": [
+      "worksite"
+    ],
+    "min_group_size": 10
+  },
+  "eligibility": {
+    "min_hours_per_week": 30,
+    "waiting_period_days": 30,
+    "dependent_age_max": 26,
+    "pre_existing_months": 12,
+    "guaranteed_issue_amount": {
+      "FL": 15000,
+      "GA": 15000,
+      "TX": 15000
+    }
+  },
+  "rate_table_id": "HI-1500-2027A",
+  "riders": [
+    "RID-WELLNESS"
+  ],
+  "form_numbers": {
+    "FL": "H1500-FL-R1",
+    "GA": "H1500-GA-R1",
+    "TX": "H1500-TX-R1"
+  },
+  "billing_modes": [
+    "payroll_deduct",
+    "direct_bill"
+  ]
+}

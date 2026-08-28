@@ -1,0 +1,52 @@
+{
+  "plan_id": "CI-3000",
+  "plan_name": "Critical Illness 3000",
+  "product_line": "critical_illness",
+  "carrier_id": "NW-LIFE",
+  "plan_year": 2027,
+  "effective_date": "2027-01-01",
+  "termination_date": null,
+  "availability": {
+    "states": [
+      "AL",
+      "FL",
+      "GA",
+      "TN",
+      "TX"
+    ],
+    "situs_rule": "employer_situs",
+    "distribution_channels": [
+      "worksite",
+      "broker"
+    ],
+    "min_group_size": 5
+  },
+  "eligibility": {
+    "min_hours_per_week": 20,
+    "waiting_period_days": 30,
+    "dependent_age_max": 26,
+    "pre_existing_months": 12,
+    "guaranteed_issue_amount": {
+      "AL": 20000,
+      "FL": 20000,
+      "GA": 20000,
+      "TN": 20000,
+      "TX": 30000
+    }
+  },
+  "rate_table_id": "CI-3000-2027A",
+  "riders": [
+    "RID-WELLNESS",
+    "RID-SPOUSE"
+  ],
+  "form_numbers": {
+    "AL": "C3000-AL-R1",
+    "FL": "C3000-FL-R1",
+    "GA": "C3000-GA-R1",
+    "TN": "C3000-TN-R1",
+    "TX": "C3000-TX-R1"
+  },
+  "billing_modes": [
+    "payroll_deduct"
+  ]
+}

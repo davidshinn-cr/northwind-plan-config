@@ -1,0 +1,250 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+language: en-US
+early_access: true
+
+tone_instructions: >-
+  In this repository the business logic lives in the data. A file under config/
+  is production behaviour, not content. Review a configuration diff as a
+  behaviour change: say what moved, say what reads it, and say what a member,
+  an employer or the carrier would observe differently.
+
+reviews:
+  profile: chill
+  request_changes_workflow: true
+  high_level_summary: true
+  high_level_summary_instructions: >-
+    When the diff touches anything under config/, open the summary with a
+    section titled "Data change impact" containing, in this order:
+
+    (1) A table of every key the diff changed. One row per key, with columns
+    File, Key, Before, After. State codes, plan identifiers, rate table
+    identifiers and dates each get their own row. Never summarise a
+    configuration diff as "updated values" without naming the keys.
+
+    (2) A table of the four state-keyed maps described in AGENTS.md, with one
+    column per map and one row per state code the diff touches, marking each
+    cell present or absent after the change, so that any disagreement between
+    the maps is visible at a glance.
+
+    (3) A Mermaid `flowchart LR` tracing the impacted path from the changed
+    file, through the modules and SQL objects that read it, to the observable
+    outcome. Include only nodes that this change actually reaches, label each
+    edge with the field or column carrying the value, and mark any node where
+    the behaviour changes. Derive the path by reading the repository.
+
+    (4) One sentence naming who observes the change and where: a member in the
+    enrolment flow, an employer group, or the carrier file.
+
+    Keep the rest of the summary short. The impact section is the summary.
+  sequence_diagrams: true
+  assess_linked_issues: true
+  related_issues: true
+  estimate_code_review_effort: true
+  suggested_labels: true
+  poem: false
+
+  auto_review:
+    enabled: true
+    drafts: false
+
+  path_instructions:
+    - path: "config/plans/**"
+      instructions: |
+        A plan document is the availability gate for one benefit plan. Review it
+        as a behaviour change, never as a content update.
+
+        For every changed plan document:
+
+        1. Enumerate the changes precisely. List every state code added to or
+           removed from `availability.states`, every state key added to or
+           removed from `eligibility.guaranteed_issue_amount` and
+           `form_numbers`, every changed `rate_table_id`, and every changed
+           `effective_date` or `termination_date`. Give each as `KEY: before ->
+           after`.
+
+        2. Check scope against the requirement. Read the linked issue. If the
+           diff adds, removes or changes any state code, plan, rate table or
+           date the requirement does not explicitly name, flag it as an
+           unintended scope change and treat it as high priority. A neighbouring
+           state left behind in an availability list is invisible to schema
+           validation and to the test suite. Do not excuse it because the value
+           looks plausible.
+
+        3. Check the coupled maps. AGENTS.md names four state-keyed maps that
+           must agree. Three are in this document and one is in the referenced
+           rate table file. For every state code the diff touches, verify all
+           four. Report any state present in one and absent from another, and
+           say which.
+
+        4. Trace the impact. Find the code and SQL that read the fields you
+           listed in step 1. Name the modules, functions, tables, columns and
+           views by path. Follow the value through to the observable outcome and
+           state what changes for a member, an employer group or the carrier.
+           Work the path out from the repository; do not assume it.
+
+        5. State the run-time behaviour when a map disagrees. Read the consuming
+           code and report what it actually does with a missing key. Do not
+           assume it raises, and do not assume it fails loudly. If it degrades
+           silently, say so and say what value reaches the member.
+
+        6. Check the effective period. A plan is sold to real people for a
+           stated period. A date applied to the wrong period rewrites what
+           already-enrolled members were sold. Confirm the period matches the
+           requirement.
+
+    - path: "config/rates/**"
+      instructions: |
+        A rate table prices one plan for one plan year. `rates_by_state` is the
+        fourth of the coupled state maps described in AGENTS.md.
+
+        Name every state and age band added or removed and every rate value
+        changed, as `KEY: before -> after`. Confirm that every state in the
+        referencing plan's `availability.states` has rows here. When a
+        `rate_table_id` is retired or replaced, identify everything that
+        references the old identifier, inside this repository and outside it,
+        and say what happens to each on the day the old table stops resolving.
+
+        Rate tables are immutable once a plan year opens. An edit in place to a
+        table for a plan year already in force is a repricing of live business:
+        flag it.
+
+    - path: "config/groups/**"
+      instructions: |
+        Employer groups carry a state of record and a list of plans sold. A
+        group's `situs_state` decides which state's rules govern every
+        `employer_situs` plan it is offered. Confirm every plan in
+        `offered_plan_ids` is published in a state that group can actually buy
+        in, and name any that is not.
+
+    - path: "src/plan_config/**"
+      instructions: |
+        These modules are the consumers of the configuration. When one changes,
+        state which configuration fields it now reads or stops reading, and
+        whether the documents under `config/` still satisfy the access pattern
+        for every state and every plan. Pay attention to defaulting: a lookup
+        that substitutes a fallback for a missing key converts a configuration
+        gap into a wrong answer that no test and no exception will surface.
+
+    - path: "db/**"
+      instructions: |
+        These objects are the published shape of the configuration and, in the
+        case of the views, business logic that lives in the database. When a
+        table, column or view changes, name every reader in `src/` and every
+        consumer outside this repository, and state whether the seeder still
+        writes what the view expects. Nullable columns here are where a
+        configuration gap lands; say what a NULL means for the rule the view
+        encodes.
+
+    - path: "schemas/**"
+      instructions: |
+        These schemas validate one document at a time. They are the only
+        automated gate on configuration content, so a loosened constraint
+        removes a real control. Say what a change here stops catching.
+
+    - path: "tests/**"
+      instructions: |
+        Tests pin the behaviour of the published configuration. Note where a
+        test is written against one specific plan or state rather than as an
+        invariant across all of them, because that is where a configuration
+        change passes unnoticed.
+
+  pre_merge_checks:
+    # This repository is configuration and the services that read it. Docstring
+    # coverage is not the signal that matters here.
+    docstrings:
+      mode: off
+
+    title:
+      mode: warning
+
+    description:
+      mode: warning
+
+    issue_assessment:
+      mode: error
+
+    custom_checks:
+      - name: Data change scope matches the requirement
+        mode: error
+        instructions: |
+          This check applies when the diff touches any file under `config/`.
+
+          PASS only if all of the following hold:
+          1. Every state code added to or removed from any map in the diff is
+             named in the linked issue or, if no issue is linked, in the pull
+             request description.
+          2. Every plan identifier and rate table identifier the diff adds,
+             removes or repoints is named there.
+          3. Every effective date or termination date the diff changes is named
+             there.
+
+          FAIL, listing the specific out-of-scope state codes, identifiers and
+          dates, if the diff reaches anything the stated requirement does not
+          cover. A value that looks reasonable is still out of scope if the
+          requirement does not name it.
+
+          If no issue is linked and the description does not state the intended
+          scope, FAIL and say that the scope of a configuration change cannot be
+          verified without a stated requirement.
+
+      - name: State keys agree across the coupled maps
+        mode: error
+        instructions: |
+          This check applies when the diff changes any state-keyed map under
+          `config/`.
+
+          AGENTS.md names four state-keyed maps that must agree for a plan to be
+          sellable in a state. Three are in the plan document and one is in the
+          referenced rate table file.
+
+          For every state code the diff adds to or removes from any of those
+          maps, resolve the state of all four maps after the change.
+
+          PASS only if every state code is present in all four, or absent from
+          all four.
+
+          FAIL if any state code is present in some and absent from others.
+          Name the state, name which maps have it and which do not, and state
+          the run-time consequence by reading the code that performs the lookup
+          rather than assuming one.
+
+      - name: Downstream consumer impact is stated
+        mode: warning
+        instructions: |
+          This check applies when the diff changes any file under `config/` or
+          any published contract in `src/plan_config/catalog_api.py` or `db/`.
+
+          PASS if the pull request body, or the review, identifies the consumers
+          affected by the change and what each of them observes differently.
+          Consumers include the modules in this repository, the SQL objects in
+          `db/`, and services outside this repository that read `GET /plans` or
+          reference a rate table identifier.
+
+          FAIL if a published identifier or contract changes and no consumer
+          impact is stated, naming the consumers that were not accounted for.
+
+knowledge_base:
+  opt_out: false
+  learnings:
+    # Pinned to this repository so the demonstrated behaviour is reproducible.
+    scope: local
+  issues:
+    scope: auto
+  pull_requests:
+    scope: auto
+  code_guidelines:
+    enabled: true
+    filePatterns:
+      - "AGENTS.md"
+      - "CONTRIBUTING.md"
+  # The enrolment experience reads GET /plans from this service and holds its
+  # own copy of the response contract. A change here is assessed against it.
+  linked_repositories:
+    - repository: "davidshinn-cr/northwind-enrollment-api"
+      instructions: >-
+        The member-facing enrolment service. It calls GET /plans on this
+        repository's catalog API, mirrors the plan summary contract in its own
+        models, prices elections against rate table identifiers published here,
+        and writes enrolment records. Treat any change to a published
+        identifier, contract field or availability list in this repository as
+        potentially breaking for it.

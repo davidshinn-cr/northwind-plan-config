@@ -1,0 +1,27 @@
+name: Configuration checks
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  validate:
+    name: Schema validation and tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements-dev.txt
+
+      - name: Validate published configuration against the JSON Schemas
+        run: PYTHONPATH=src python -m plan_config.validate
+
+      - name: Run the test suite
+        run: python -m pytest

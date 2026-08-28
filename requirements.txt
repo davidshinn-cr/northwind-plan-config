@@ -1,0 +1,2 @@
+fastapi>=0.110
+jsonschema>=4.21

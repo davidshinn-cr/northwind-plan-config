@@ -1,0 +1,49 @@
+{
+  "plan_id": "DEN-1000",
+  "plan_name": "Dental Choice 1000",
+  "product_line": "dental",
+  "carrier_id": "NW-DENTAL",
+  "plan_year": 2027,
+  "effective_date": "2027-01-01",
+  "termination_date": null,
+  "availability": {
+    "states": [
+      "AL",
+      "FL",
+      "GA",
+      "TN",
+      "TX"
+    ],
+    "situs_rule": "employer_situs",
+    "distribution_channels": [
+      "worksite",
+      "broker"
+    ],
+    "min_group_size": 3
+  },
+  "eligibility": {
+    "min_hours_per_week": 20,
+    "waiting_period_days": 90,
+    "dependent_age_max": 26,
+    "pre_existing_months": 0,
+    "guaranteed_issue_amount": {
+      "AL": 1000,
+      "FL": 1000,
+      "GA": 1000,
+      "TN": 1000,
+      "TX": 1000
+    }
+  },
+  "rate_table_id": "DEN-1000-2026A",
+  "riders": [],
+  "form_numbers": {
+    "AL": "D1000-AL-R1",
+    "FL": "D1000-FL-R1",
+    "GA": "D1000-GA-R1",
+    "TN": "D1000-TN-R1",
+    "TX": "D1000-TX-R1"
+  },
+  "billing_modes": [
+    "payroll_deduct"
+  ]
+}

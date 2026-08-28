@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://northwind.example/schemas/plan.schema.json",
+  "title": "Plan",
+  "description": "A benefit plan as published by the Product Configuration team.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "plan_id",
+    "plan_name",
+    "product_line",
+    "carrier_id",
+    "plan_year",
+    "effective_date",
+    "termination_date",
+    "availability",
+    "eligibility",
+    "rate_table_id",
+    "riders",
+    "form_numbers",
+    "billing_modes"
+  ],
+  "properties": {
+    "plan_id": { "type": "string", "pattern": "^[A-Z]{2,4}-[0-9]{4}$" },
+    "plan_name": { "type": "string", "minLength": 1 },
+    "product_line": {
+      "type": "string",
+      "enum": ["accident", "critical_illness", "hospital_indemnity", "dental", "vision", "life"]
+    },
+    "carrier_id": { "type": "string", "pattern": "^NW-[A-Z]+$" },
+    "plan_year": { "type": "integer", "minimum": 2020, "maximum": 2035 },
+    "effective_date": { "type": "string", "format": "date" },
+    "termination_date": { "type": ["string", "null"], "format": "date" },
+    "availability": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["states", "situs_rule", "distribution_channels", "min_group_size"],
+      "properties": {
+        "states": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^[A-Z]{2}$" }
+        },
+        "situs_rule": { "type": "string", "enum": ["employer_situs", "member_residence"] },
+        "distribution_channels": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "enum": ["worksite", "broker", "direct"] }
+        },
+        "min_group_size": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "eligibility": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "min_hours_per_week",
+        "waiting_period_days",
+        "dependent_age_max",
+        "pre_existing_months",
+        "guaranteed_issue_amount"
+      ],
+      "properties": {
+        "min_hours_per_week": { "type": "integer", "minimum": 0, "maximum": 40 },
+        "waiting_period_days": { "type": "integer", "minimum": 0 },
+        "dependent_age_max": { "type": "integer", "minimum": 18, "maximum": 30 },
+        "pre_existing_months": { "type": "integer", "minimum": 0 },
+        "guaranteed_issue_amount": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": false,
+          "patternProperties": {
+            "^[A-Z]{2}$": { "type": "integer", "minimum": 0 }
+          }
+        }
+      }
+    },
+    "rate_table_id": { "type": "string", "pattern": "^[A-Z]{2,4}-[0-9]{4}-[0-9]{4}[A-Z]$" },
+    "riders": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^RID-[A-Z]+$" }
+    },
+    "form_numbers": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "patternProperties": {
+        "^[A-Z]{2}$": { "type": "string", "minLength": 1 }
+      }
+    },
+    "billing_modes": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "enum": ["payroll_deduct", "direct_bill", "list_bill"] }
+    }
+  }
+}

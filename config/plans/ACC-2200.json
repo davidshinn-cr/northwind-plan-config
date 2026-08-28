@@ -1,0 +1,49 @@
+{
+  "plan_id": "ACC-2200",
+  "plan_name": "Accident Advantage 2200",
+  "product_line": "accident",
+  "carrier_id": "NW-LIFE",
+  "plan_year": 2027,
+  "effective_date": "2027-01-01",
+  "termination_date": null,
+  "availability": {
+    "states": [
+      "AL",
+      "FL",
+      "GA",
+      "TN"
+    ],
+    "situs_rule": "employer_situs",
+    "distribution_channels": [
+      "worksite",
+      "broker"
+    ],
+    "min_group_size": 3
+  },
+  "eligibility": {
+    "min_hours_per_week": 20,
+    "waiting_period_days": 0,
+    "dependent_age_max": 26,
+    "pre_existing_months": 0,
+    "guaranteed_issue_amount": {
+      "AL": 25000,
+      "FL": 25000,
+      "GA": 25000,
+      "TN": 25000
+    }
+  },
+  "rate_table_id": "ACC-2200-2027A",
+  "riders": [
+    "RID-WELLNESS",
+    "RID-DISABILITY"
+  ],
+  "form_numbers": {
+    "AL": "A2200-AL-R1",
+    "FL": "A2200-FL-R1",
+    "GA": "A2200-GA-R1",
+    "TN": "A2200-TN-R1"
+  },
+  "billing_modes": [
+    "payroll_deduct"
+  ]
+}

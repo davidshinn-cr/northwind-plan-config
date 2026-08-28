@@ -1,0 +1,44 @@
+{
+  "groups": [
+    {
+      "group_id": "NW-GRP-0017",
+      "group_name": "Blue Ridge Logistics",
+      "situs_state": "TN",
+      "eligible_lives": 412,
+      "open_enrollment": { "start": "2026-10-01", "end": "2026-11-15" },
+      "offered_plan_ids": ["ACC-2200", "CI-3000", "DEN-1000"]
+    },
+    {
+      "group_id": "NW-GRP-0042",
+      "group_name": "Peachtree Manufacturing",
+      "situs_state": "GA",
+      "eligible_lives": 1180,
+      "open_enrollment": { "start": "2026-10-01", "end": "2026-11-15" },
+      "offered_plan_ids": ["ACC-2200", "CI-3000", "HI-1500", "DEN-1000"]
+    },
+    {
+      "group_id": "NW-GRP-0088",
+      "group_name": "Lone Star Fabrication",
+      "situs_state": "TX",
+      "eligible_lives": 640,
+      "open_enrollment": { "start": "2026-10-15", "end": "2026-11-30" },
+      "offered_plan_ids": ["CI-3000", "HI-1500", "DEN-1000"]
+    },
+    {
+      "group_id": "NW-GRP-0103",
+      "group_name": "Gulf Coast Marine Services",
+      "situs_state": "AL",
+      "eligible_lives": 275,
+      "open_enrollment": { "start": "2026-11-01", "end": "2026-12-15" },
+      "offered_plan_ids": ["ACC-2200", "CI-3000", "DEN-1000"]
+    },
+    {
+      "group_id": "NW-GRP-0151",
+      "group_name": "Sunshine Retail Partners",
+      "situs_state": "FL",
+      "eligible_lives": 2340,
+      "open_enrollment": { "start": "2026-09-15", "end": "2026-10-31" },
+      "offered_plan_ids": ["ACC-2200", "CI-3000", "HI-1500", "DEN-1000"]
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "riders": [
+    {
+      "rider_id": "RID-WELLNESS",
+      "rider_name": "Wellness Benefit Rider",
+      "description": "Annual payout for a completed covered health screening.",
+      "requires_form_filing": true,
+      "excluded_states": []
+    },
+    {
+      "rider_id": "RID-DISABILITY",
+      "rider_name": "Off-Job Disability Rider",
+      "description": "Weekly indemnity for off-the-job disability.",
+      "requires_form_filing": true,
+      "excluded_states": ["CA"]
+    },
+    {
+      "rider_id": "RID-SPOUSE",
+      "rider_name": "Spouse Critical Illness Rider",
+      "description": "Extends the critical illness benefit to a covered spouse.",
+      "requires_form_filing": true,
+      "excluded_states": []
+    }
+  ]
+}
