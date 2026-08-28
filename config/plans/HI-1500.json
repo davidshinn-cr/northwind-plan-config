@@ -10,6 +10,7 @@
     "states": [
       "FL",
       "GA",
+      "NY",
       "TX"
     ],
     "situs_rule": "member_residence",
@@ -26,6 +27,7 @@
     "guaranteed_issue_amount": {
       "FL": 15000,
       "GA": 15000,
+      "NY": 15000,
       "TX": 15000
     }
   },
@@ -36,6 +38,7 @@
   "form_numbers": {
     "FL": "H1500-FL-R1",
     "GA": "H1500-GA-R1",
+    "NY": "H1500-NY-R1",
     "TX": "H1500-TX-R1"
   },
   "billing_modes": [
