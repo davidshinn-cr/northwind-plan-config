@@ -11,6 +11,7 @@
       "AL",
       "FL",
       "GA",
+      "NY",
       "TN"
     ],
     "situs_rule": "employer_situs",
@@ -29,6 +30,7 @@
       "AL": 25000,
       "FL": 25000,
       "GA": 25000,
+      "NY": 25000,
       "TN": 25000
     }
   },
@@ -41,6 +43,7 @@
     "AL": "A2200-AL-R1",
     "FL": "A2200-FL-R1",
     "GA": "A2200-GA-R1",
+    "NY": "A2200-NY-R1",
     "TN": "A2200-TN-R1"
   },
   "billing_modes": [
