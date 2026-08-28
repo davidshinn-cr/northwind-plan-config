@@ -134,7 +134,8 @@ reviews:
         anything. Report every file and line outside this repository that names
         either one, and say what happens there on the day the retired table
         stops resolving. "No consumers found" is only a valid answer if you
-        searched and can say where.
+        searched and can say where. If a consumer needs a paired change, say
+        which repository, which file, and what has to change there.
 
     - path: "config/groups/**"
       instructions: |
@@ -260,30 +261,41 @@ reviews:
           so nothing reads it. Mention it in passing at most; it does not fail
           this check.
 
-      - name: Downstream consumer impact is stated
-        mode: warning
+      - name: Cross-service impact is accounted for
+        mode: error
         instructions: |
-          This check applies when the diff changes any file under `config/` or
-          any published contract in `src/plan_config/catalog_api.py` or `db/`.
+          This check applies when the diff adds, retires or repoints a published
+          identifier, or changes a published contract.
 
           A published identifier is any `plan_id`, `rate_table_id`, contract
-          field name in the `GET /plans` response, or table, column or view in
-          `db/`. Services outside this repository hold these as literal strings
-          and cannot be checked by any build in this repository.
+          field name in the `GET /plans` or `GET /rate-tables/{id}` response, or
+          table, column or view in `db/`. Services outside this repository hold
+          these as literal strings. No build, test or schema in this repository
+          can see those references, so they are invisible unless you look.
 
-          When the diff adds, retires or repoints a published identifier, search
-          the linked repositories for that identifier as a literal string, and
-          for the code that reads the contract field. Do this before judging.
+          Procedure, which you must actually carry out before judging:
+          1. List every published identifier the diff adds, retires or repoints,
+             and every contract field it changes.
+          2. For each one, search the linked repositories for that identifier as
+             a literal string, and for the code that reads that contract field.
+          3. For each hit, read the surrounding code and work out what it does
+             on the day this change merges.
 
-          PASS if every affected consumer is identified -- in this repository,
-          in `db/`, and in the linked repositories -- together with what each
-          observes differently, whether that identification comes from the pull
-          request body or from your own analysis.
+          PASS only if, for every published identifier and contract field the
+          diff touches, either no consumer in a linked repository references it,
+          or the pull request accounts for the paired change that repository
+          needs -- naming the repository, the file, and what has to change there.
 
-          FAIL if a published identifier changes and a consumer of it exists
-          that has not been accounted for. Name the repository, the file and the
-          line, and say what breaks there. Do not fail a change that alters no
-          published identifier.
+          FAIL if a consumer in a linked repository would break, or silently
+          produce a wrong result, and the pull request does not account for it.
+          Name the repository, the file and the symbol, say what breaks, and
+          state the paired change required. Describing the consequence is not
+          the same as accounting for it: if a paired change in another
+          repository is required and is not named as required, this check fails.
+
+          State which linked repositories you searched and what you searched
+          for. A verdict of "no consumers" reached without searching is not a
+          valid verdict.
 
 knowledge_base:
   opt_out: false
