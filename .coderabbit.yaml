@@ -37,6 +37,11 @@ reviews:
     mark every node whose behaviour changes, and cross the service boundary
     explicitly when the path leaves this repository.
 
+    The diagram has to render on the pull request page, so keep the Mermaid
+    syntactically valid: never put a backtick anywhere inside the Mermaid block,
+    write hex colours bare as fill:#fff3cd with no quotes or backticks around
+    them, and wrap every node label in double quotes.
+
     (4) One sentence naming who observes the change and where: a member in the
     enrolment flow, an employer group, or the carrier file.
 
