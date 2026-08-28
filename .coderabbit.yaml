@@ -200,13 +200,18 @@ reviews:
           For every state code the diff adds to or removes from any of those
           maps, resolve the state of all four maps after the change.
 
-          PASS only if every state code is present in all four, or absent from
-          all four.
+          PASS only if every state code listed in `availability.states` after
+          the change is also present in the other three maps.
 
-          FAIL if any state code is present in some and absent from others.
-          Name the state, name which maps have it and which do not, and state
-          the run-time consequence by reading the code that performs the lookup
-          rather than assuming one.
+          FAIL if a state remains or becomes published in `availability.states`
+          while any of the other three lacks it. Name the state, name which maps
+          have it and which do not, and state the run-time consequence by
+          reading the code that performs the lookup rather than assuming one.
+
+          A state present in one of the other three maps but absent from
+          `availability.states` is a stale entry, not a defect: it is not sold,
+          so nothing reads it. Mention it in passing at most; it does not fail
+          this check.
 
       - name: Downstream consumer impact is stated
         mode: warning
