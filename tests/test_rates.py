@@ -42,3 +42,10 @@ def test_an_unknown_age_band_falls_back_to_zero(plans, rate_tables, age_band):
     # Documented behaviour: pricing degrades to zero rather than raising, so a
     # partially published rate table cannot take enrolment down.
     assert rates.resolve_rate(plans["ACC-2200"], "GA", age_band, rate_tables) == Decimal("0.00")
+
+
+def test_acc_2200_is_priced_in_every_state_it_is_published_in(plans, rate_tables):
+    acc = plans["ACC-2200"]
+    published = set(acc["availability"]["states"])
+    priced = set(rates.priced_states(acc, rate_tables))
+    assert published <= priced
