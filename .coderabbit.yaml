@@ -128,6 +128,14 @@ reviews:
         table for a plan year already in force is a repricing of live business:
         flag it.
 
+        A rate table identifier is a published contract, not an internal name.
+        When one is retired, added or repointed, search the linked repositories
+        for the old and the new identifier as literal strings before concluding
+        anything. Report every file and line outside this repository that names
+        either one, and say what happens there on the day the retired table
+        stops resolving. "No consumers found" is only a valid answer if you
+        searched and can say where.
+
     - path: "config/groups/**"
       instructions: |
         Employer groups carry a state of record and a list of plans sold. A
@@ -258,14 +266,24 @@ reviews:
           This check applies when the diff changes any file under `config/` or
           any published contract in `src/plan_config/catalog_api.py` or `db/`.
 
-          PASS if the pull request body, or the review, identifies the consumers
-          affected by the change and what each of them observes differently.
-          Consumers include the modules in this repository, the SQL objects in
-          `db/`, and services outside this repository that read `GET /plans` or
-          reference a rate table identifier.
+          A published identifier is any `plan_id`, `rate_table_id`, contract
+          field name in the `GET /plans` response, or table, column or view in
+          `db/`. Services outside this repository hold these as literal strings
+          and cannot be checked by any build in this repository.
 
-          FAIL if a published identifier or contract changes and no consumer
-          impact is stated, naming the consumers that were not accounted for.
+          When the diff adds, retires or repoints a published identifier, search
+          the linked repositories for that identifier as a literal string, and
+          for the code that reads the contract field. Do this before judging.
+
+          PASS if every affected consumer is identified -- in this repository,
+          in `db/`, and in the linked repositories -- together with what each
+          observes differently, whether that identification comes from the pull
+          request body or from your own analysis.
+
+          FAIL if a published identifier changes and a consumer of it exists
+          that has not been accounted for. Name the repository, the file and the
+          line, and say what breaks there. Do not fail a change that alters no
+          published identifier.
 
 knowledge_base:
   opt_out: false
