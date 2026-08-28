@@ -3,10 +3,9 @@ language: en-US
 early_access: true
 
 tone_instructions: >-
-  In this repository the business logic lives in the data. A file under config/
-  is production behaviour, not content. Review a configuration diff as a
-  behaviour change: say what moved, say what reads it, and say what a member,
-  an employer or the carrier would observe differently.
+  Business logic lives in the data here. A file under config/ is production
+  behaviour, not content. Review a configuration diff as a behaviour change:
+  name what moved, name what reads it, say what a member or the carrier sees.
 
 reviews:
   profile: chill
@@ -152,7 +151,7 @@ reviews:
     # This repository is configuration and the services that read it. Docstring
     # coverage is not the signal that matters here.
     docstrings:
-      mode: off
+      mode: "off"
 
     title:
       mode: warning
