@@ -8,10 +8,7 @@
   "termination_date": null,
   "availability": {
     "states": [
-      "AL",
-      "FL",
       "GA",
-      "TN",
       "TX"
     ],
     "situs_rule": "employer_situs",
@@ -27,10 +24,7 @@
     "dependent_age_max": 26,
     "pre_existing_months": 12,
     "guaranteed_issue_amount": {
-      "AL": 20000,
-      "FL": 20000,
       "GA": 20000,
-      "TN": 20000,
       "TX": 30000
     }
   },
@@ -40,10 +34,7 @@
     "RID-SPOUSE"
   ],
   "form_numbers": {
-    "AL": "C3000-AL-R1",
-    "FL": "C3000-FL-R1",
     "GA": "C3000-GA-R1",
-    "TN": "C3000-TN-R1",
     "TX": "C3000-TX-R1"
   },
   "billing_modes": [
