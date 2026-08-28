@@ -8,7 +8,7 @@ tone_instructions: >-
   name what moved, name what reads it, say what a member or the carrier sees.
 
 reviews:
-  profile: chill
+  profile: assertive
   request_changes_workflow: true
   high_level_summary: true
   high_level_summary_instructions: >-
@@ -77,9 +77,19 @@ reviews:
 
         3. Check the coupled maps. AGENTS.md names four state-keyed maps that
            must agree. Three are in this document and one is in the referenced
-           rate table file. For every state code the diff touches, verify all
-           four. Report any state present in one and absent from another, and
-           say which.
+           rate table file.
+
+           You cannot do this from the diff hunks. A state code added on one
+           line tells you nothing about the three maps whose lines did not
+           change. Open the whole plan document at the head commit and read
+           `availability.states`, `eligibility.guaranteed_issue_amount` and
+           `form_numbers` in full. Then read `rate_table_id`, open
+           `config/rates/<rate_table_id>.json`, and read `rates_by_state` in
+           full. Only then compare.
+
+           For every state code the diff adds to `availability.states`, report
+           whether it is present in each of the other three, naming the file and
+           key you checked. Say explicitly which maps are missing it.
 
         4. Trace the impact. Find the code and SQL that read the fields you
            listed in step 1. Name the modules, functions, tables, columns and
@@ -211,8 +221,18 @@ reviews:
           sellable in a state. Three are in the plan document and one is in the
           referenced rate table file.
 
-          For every state code the diff adds to or removes from any of those
-          maps, resolve the state of all four maps after the change.
+          Resolve this by reading files, not diff hunks. The diff shows only
+          the lines that changed; the maps that disagree are the ones that did
+          not change, so they are invisible in the patch. For the plan document
+          each changed file belongs to, open the full document at the head
+          commit and read `availability.states`,
+          `eligibility.guaranteed_issue_amount` and `form_numbers`. Then read
+          `rate_table_id` from that document, open
+          `config/rates/<rate_table_id>.json`, and read `rates_by_state`. Build
+          the four sets of state codes and compare them.
+
+          State in your explanation which four files and keys you read, so the
+          comparison can be checked.
 
           PASS only if every state code listed in `availability.states` after
           the change is also present in the other three maps.
