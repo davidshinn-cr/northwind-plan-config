@@ -20,16 +20,22 @@ reviews:
     identifiers and dates each get their own row. Never summarise a
     configuration diff as "updated values" without naming the keys.
 
-    (2) A table of the four state-keyed maps described in AGENTS.md, with one
-    column per map and one row per state code the diff touches, marking each
-    cell present or absent after the change, so that any disagreement between
-    the maps is visible at a glance.
+    (2) A table of the four state-keyed maps named in AGENTS.md, one column per
+    map, one row per state code the diff touches, each cell marked present or
+    absent after the change. Head the fourth column with the actual path of the
+    referenced rate table file and open that file to fill it in; do not label it
+    generically and do not infer it from the plan document.
 
-    (3) A Mermaid `flowchart LR` tracing the impacted path from the changed
-    file, through the modules and SQL objects that read it, to the observable
-    outcome. Include only nodes that this change actually reaches, label each
-    edge with the field or column carrying the value, and mark any node where
-    the behaviour changes. Derive the path by reading the repository.
+    (3) A Mermaid `flowchart LR` tracing the impacted path from the changed file
+    to the observable outcome. Build it by reading the repository: open the
+    modules under src/, the SQL under db/, and AGENTS.md, and follow the changed
+    field to the code that reads it. Every node label must name a real artifact
+    of this repository -- a file path, a module and function, a table, a column
+    or a view -- together with what it does to the value. Generic labels such as
+    "configuration reader", "offer flow" or "downstream service" are not
+    acceptable. Label each edge with the field or column carrying the value,
+    mark every node whose behaviour changes, and cross the service boundary
+    explicitly when the path leaves this repository.
 
     (4) One sentence naming who observes the change and where: a member in the
     enrolment flow, an employer group, or the carrier file.
@@ -168,19 +174,28 @@ reviews:
         instructions: |
           This check applies when the diff touches any file under `config/`.
 
-          PASS only if all of the following hold:
-          1. Every state code added to or removed from any map in the diff is
-             named in the linked issue or, if no issue is linked, in the pull
-             request description.
-          2. Every plan identifier and rate table identifier the diff adds,
-             removes or repoints is named there.
-          3. Every effective date or termination date the diff changes is named
-             there.
+          Read the linked issue, or the pull request description if no issue is
+          linked, as the statement of intent. It may name the keys to change, or
+          it may state an outcome the change must produce. Both are valid
+          specifications.
 
-          FAIL, listing the specific out-of-scope state codes, identifiers and
-          dates, if the diff reaches anything the stated requirement does not
-          cover. A value that looks reasonable is still out of scope if the
-          requirement does not name it.
+          For every state code, plan identifier, rate table identifier and date
+          the diff adds, removes or changes, decide whether it is accounted for:
+          a key is accounted for if the requirement names it, or if changing it
+          is a direct and necessary consequence of the outcome the requirement
+          states.
+
+          PASS only if both of the following hold:
+          1. Every key the diff touches is accounted for.
+          2. The stated outcome is fully achieved. If the requirement states an
+             outcome, work out every key that must move to produce it and
+             confirm the diff moves all of them.
+
+          FAIL if the diff reaches a key the requirement neither names nor
+          entails, listing those keys. FAIL, separately, if a key that the
+          stated outcome requires to move has not moved, naming it and saying
+          what the stated outcome would have required. A value that survives an
+          edit because nobody noticed it is the failure this check exists for.
 
           If no issue is linked and the description does not state the intended
           scope, FAIL and say that the scope of a configuration change cannot be
