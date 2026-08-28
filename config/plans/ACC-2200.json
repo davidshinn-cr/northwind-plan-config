@@ -11,7 +11,8 @@
       "AL",
       "FL",
       "GA",
-      "TN"
+      "TN",
+      "TX"
     ],
     "situs_rule": "employer_situs",
     "distribution_channels": [
@@ -29,7 +30,8 @@
       "AL": 25000,
       "FL": 25000,
       "GA": 25000,
-      "TN": 25000
+      "TN": 25000,
+      "TX": 25000
     }
   },
   "rate_table_id": "ACC-2200-2027A",
@@ -41,7 +43,8 @@
     "AL": "A2200-AL-R1",
     "FL": "A2200-FL-R1",
     "GA": "A2200-GA-R1",
-    "TN": "A2200-TN-R1"
+    "TN": "A2200-TN-R1",
+    "TX": "A2200-TX-R1"
   },
   "billing_modes": [
     "payroll_deduct"
